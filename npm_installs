@@ -6,3 +6,4 @@ npm install react-pro-sidebar
 npm install @fullcalendar/react
 npm install @mui/x-data-grid
 npm install @nivo/bar
+npm install @nivo/geo
