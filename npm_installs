@@ -1,0 +1,8 @@
+npm install @mui/material @emotion/react @emotion/styled
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+npm install react-router-dom
+npm install @mui/icons-material
+npm install react-pro-sidebar
+npm install @fullcalendar/react
+npm install @mui/x-data-grid
+npm install @nivo/bar
