@@ -5,7 +5,7 @@ const Login = React.lazy(() => import("../components/pages/Login"));
 const Dashboard = React.lazy(() => import("../components/pages/Dashboard"));
 const People = React.lazy(() => import("../components/pages/People"));
 const Chart = React.lazy(() => import("../components/pages/Chart"));
-const Contacts = React.lazy(() => import("../components/pages/Contacts"));
+const Forms = React.lazy(() => import("../components/pages/Forms"));
 const Help = React.lazy(() => import("../components/pages/Help"));
 const Map = React.lazy(() => import("../components/pages/Map"));
 const Table = React.lazy(() => import("../components/pages/Table"));
@@ -19,7 +19,7 @@ export default function AppRoute() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/people" element={<People />} />
           <Route path="/chart" element={<Chart />} />
-          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/form" element={<Forms />} />
           <Route path="/help" element={<Help />} />
           <Route path="/map" element={<Map />} />
           <Route path="/table" element={<Table />} />

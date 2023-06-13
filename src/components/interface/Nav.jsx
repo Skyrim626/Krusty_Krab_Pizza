@@ -101,11 +101,7 @@ export default function Nav() {
                 to="/people"
                 icon={<PeopleOutlinedIcon />}
               />
-              <Item
-                title="Contacts"
-                to="/contacts"
-                icon={<ContactsOutlinedIcon />}
-              />
+              <Item title="Forms" to="/form" icon={<ContactsOutlinedIcon />} />
               {/* <Typography
                 variant="h6"
                 color={colors.grey[300]}

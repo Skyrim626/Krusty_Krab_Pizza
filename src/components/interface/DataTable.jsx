@@ -49,9 +49,9 @@ const rows = [
   { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
-export default function DataTable() {
+export default function DataTable({ n_rows, n_columns }) {
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 430, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}

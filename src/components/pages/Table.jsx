@@ -56,8 +56,6 @@ export default function Table() {
       });
   }, []);
 
-  console.log(codeCard2);
-
   ///////////////////////////////////////
 
   // Card 1 Columns:
