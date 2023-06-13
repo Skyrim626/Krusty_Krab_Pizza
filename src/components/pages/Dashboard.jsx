@@ -22,7 +22,33 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 import DataTable from "../interface/DataTable";
 
+
+// Headers for Pizza Toppings
+const pizza_toppings = [
+  { field: "topping_id", headerName: "ID", width: 70 },
+  { field: "topping_name", headerName: "Topping Name", width: 130 },
+];
+
 export default function Dashboard() {
+
+  // Get Pizza Topping Data
+  const [topping, setTopping] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost/backend/pizzaToppings.php")
+      .then((res) => res.json())
+      .then((data) => {
+        const modifiedData = data.map((topping) => ({
+          ...topping,
+          id: topping.topping_id,
+        }));
+        setTopping(modifiedData);
+      })
+      .catch((error) => {
+        console.error("Error retrieving customer data:", error);
+      });
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -230,7 +256,8 @@ export default function Dashboard() {
                     subtitle="List of Pizza Toppings"
                   />
                 </div>
-                <DataTable />
+                {topping && <DataTable n_rows={topping} n_columns={pizza_toppings} />}
+                
               </Grid>
             </Grid>
           </Box>

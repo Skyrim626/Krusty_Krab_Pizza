@@ -53,8 +53,8 @@ export default function DataTable({ n_rows, n_columns }) {
   return (
     <div style={{ height: 430, width: "100%" }}>
       <DataGrid
-        rows={rows}
-        columns={columns}
+        rows={n_rows}
+        columns={n_columns}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
