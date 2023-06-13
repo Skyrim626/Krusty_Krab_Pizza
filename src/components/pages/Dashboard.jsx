@@ -22,14 +22,63 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 import DataTable from "../interface/DataTable";
 
-
 // Headers for Pizza Toppings
 const pizza_toppings = [
   { field: "topping_id", headerName: "ID", width: 70 },
   { field: "topping_name", headerName: "Topping Name", width: 130 },
 ];
 
+// A function that fetches Data's
+function fetchData(api) {
+  return fetch(api)
+    .then((res) => res.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error retrieving total runners data:", error);
+    });
+}
+
 export default function Dashboard() {
+
+  // Get Total Runners Data
+  const [totalRunners, setTotalRunners] = useState(null);
+
+  useEffect(() => {
+    fetchData("http://localhost/backend/getTotalRunners.php").then((data) => {
+      setTotalRunners(data);
+    });
+  }, []);
+
+
+  // Get Total Customers Data
+  const [totalCustomers, setTotalCustomers] = useState(null);
+
+  useEffect(() => {
+    fetchData("http://localhost/backend/getTotalCustomers.php").then((data) => {
+      setTotalCustomers(data);
+    });
+  }, []);
+
+  // Get Total Cancelled Orders
+  const [totalCancel, setTotalCancel] = useState(null);
+
+  useEffect(() => {
+    fetchData("http://localhost/backend/getTotalCancelledOrders.php").then((data) => {
+      setTotalCancel(data);
+    });
+  }, []);
+
+  // Get Total Pizzas Solds
+  const [soldPizzas, setSoldPizzas] = useState(null); 
+
+  useEffect(() => {
+    fetchData("http://localhost/backend/getTotalPizzasSold.php").then((data) => {
+      setSoldPizzas(data);
+    });
+  }, []);
+
 
   // Get Pizza Topping Data
   const [topping, setTopping] = useState(null);
@@ -117,7 +166,12 @@ export default function Dashboard() {
                     <LocalShippingIcon fontSize="large" />
                   </div>
 
-                  <Typography variant="h3">Hello World</Typography>
+                  {totalRunners && (
+                    <Typography variant="h3">
+                      {totalRunners[0].total}
+                    </Typography>
+                  )}
+
                   <Typography variant="h6" sx={{ opacity: 0.8 }}>
                     Total Runners
                   </Typography>
@@ -144,7 +198,11 @@ export default function Dashboard() {
                   >
                     <LocalPizzaIcon fontSize="large" />
                   </div>
-                  <Typography variant="h3">Hello World</Typography>
+                  {soldPizzas && (
+                    <Typography variant="h3">
+                      {soldPizzas[0].total}
+                    </Typography>
+                  )}
                   <Typography variant="h6" sx={{ opacity: 0.72 }}>
                     Total Pizzas Solds
                   </Typography>
@@ -171,8 +229,13 @@ export default function Dashboard() {
                   >
                     <AcUnitIcon fontSize="large" />
                   </div>
-                  <Typography variant="h3">Hello World</Typography>
-                  <Typography variant="h6" sx={{ opacity: 0.72 }}>
+                  {totalCustomers && (
+                    <Typography variant="h3">
+                      {totalCustomers[0].total}
+                    </Typography>
+                  )}
+                  
+                  <Typography variant="h6" sx={{ opacity: 0.8 }}>
                     Total Customers
                   </Typography>
                 </Card>
@@ -198,7 +261,11 @@ export default function Dashboard() {
                   >
                     <DisabledByDefaultIcon fontSize="large" />
                   </div>
-                  <Typography variant="h3">Hello World</Typography>
+                  {totalCancel && (
+                    <Typography variant="h3">
+                      {totalCancel[0].total}
+                    </Typography>
+                  )}
                   <Typography variant="h6" sx={{ opacity: 0.72 }}>
                     Cancelled Orders
                   </Typography>
@@ -256,8 +323,9 @@ export default function Dashboard() {
                     subtitle="List of Pizza Toppings"
                   />
                 </div>
-                {topping && <DataTable n_rows={topping} n_columns={pizza_toppings} />}
-                
+                {topping && (
+                  <DataTable n_rows={topping} n_columns={pizza_toppings} />
+                )}
               </Grid>
             </Grid>
           </Box>
