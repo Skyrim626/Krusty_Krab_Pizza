@@ -20,7 +20,9 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { useState, useEffect } from "react";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import DataTable from "../interface/DataTable";
+import { saveAs } from "file-saver";
 
 // Headers for Pizza Toppings
 const pizza_toppings = [
@@ -41,6 +43,28 @@ function fetchData(api) {
 }
 
 export default function Dashboard() {
+
+  // A function that format the data(Mysql) into XML
+  const [data, setData] = useState("");
+
+  const formatDataToXml = (data) => {
+    // Format the data to XML here using the retrieved data
+    const xmlData = `<root>${data}</root>`;
+    return xmlData;
+  };
+
+  const handleDownload = () => {
+    fetch("http://localhost/backend/fetchForDataMart.php")
+      .then((response) => response.text())
+      .then((data) => {
+        const formattedData = formatDataToXml(data);
+        const blob = new Blob([formattedData], { type: "application/xml" });
+        saveAs(blob, "data.xml");
+      })
+      .catch((error) => {
+        console.error("Error retrieving data:", error);
+      });
+  };
 
   // Get Total Runners Data
   const [totalRunners, setTotalRunners] = useState(null);
@@ -142,6 +166,22 @@ export default function Dashboard() {
               alignItems="center"
             >
               <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+              <Box>
+                <Button
+                  sx={{
+                    backgroundColor: colors.blueAccent[700],
+                    color: colors.grey[100],
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                  }}
+                  onClick={handleDownload}
+                >
+                  <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+                  Download Reports For Data Mart
+                </Button>
+              </Box>
+              
             </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6} md={3}>
