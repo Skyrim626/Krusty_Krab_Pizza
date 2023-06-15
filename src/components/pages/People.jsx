@@ -8,6 +8,28 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import React, { useEffect, useState } from "react";
 
 export default function People() {
+  // A function that format the data(Mysql) into XML
+  const [data, setData] = useState("");
+
+  const formatDataToXml = (data) => {
+    // Format the data to XML here using the retrieved data
+    const xmlData = `<root>${data}</root>`;
+    return xmlData;
+  };
+
+  const handleDownload = () => {
+    fetch("http://localhost/backend/customer.php")
+      .then((response) => response.text())
+      .then((data) => {
+        const formattedData = formatDataToXml(data);
+        const blob = new Blob([formattedData], { type: "application/xml" });
+        saveAs(blob, "Customers.xml");
+      })
+      .catch((error) => {
+        console.error("Error retrieving data:", error);
+      });
+  };
+
   const [customers, setCustomers] = useState(null);
 
   useEffect(() => {
@@ -68,9 +90,10 @@ export default function People() {
                     fontWeight: "bold",
                     padding: "10px 20px",
                   }}
+                  onClick={handleDownload}
                 >
                   <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-                  Download Reports
+                  Download Report
                 </Button>
               </Box>
             </Box>

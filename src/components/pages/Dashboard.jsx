@@ -9,6 +9,13 @@ import {
   Grid,
   Container,
   Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import Header from "../interface/Header";
 import { tokens } from "../../theme";
@@ -43,23 +50,31 @@ function fetchData(api) {
 }
 
 export default function Dashboard() {
-
   // A function that format the data(Mysql) into XML
   const [data, setData] = useState("");
 
   const formatDataToXml = (data) => {
+    let xmlData = "<root>";
     // Format the data to XML here using the retrieved data
-    const xmlData = `<root>${data}</root>`;
+    data.forEach((item) => {
+      xmlData += "<item>";
+      xmlData += `<order_id>${item.order_id}</order_id>`;
+      xmlData += `<runner_id>${item.runner_id}</runner_id>`;
+      xmlData += `<customer_id>${item.customer_id}</customer_id>`;
+      xmlData += `<pizza_name>${item.pizza_name}</pizza_name>`;
+      xmlData += "</item>";
+    });
+    xmlData += "</root>";
     return xmlData;
   };
 
   const handleDownload = () => {
     fetch("http://localhost/backend/fetchForDataMart.php")
-      .then((response) => response.text())
+      .then((response) => response.json())
       .then((data) => {
         const formattedData = formatDataToXml(data);
         const blob = new Blob([formattedData], { type: "application/xml" });
-        saveAs(blob, "data.xml");
+        saveAs(blob, "Data  Mart.xml");
       })
       .catch((error) => {
         console.error("Error retrieving data:", error);
@@ -75,7 +90,6 @@ export default function Dashboard() {
     });
   }, []);
 
-
   // Get Total Customers Data
   const [totalCustomers, setTotalCustomers] = useState(null);
 
@@ -89,20 +103,23 @@ export default function Dashboard() {
   const [totalCancel, setTotalCancel] = useState(null);
 
   useEffect(() => {
-    fetchData("http://localhost/backend/getTotalCancelledOrders.php").then((data) => {
-      setTotalCancel(data);
-    });
+    fetchData("http://localhost/backend/getTotalCancelledOrders.php").then(
+      (data) => {
+        setTotalCancel(data);
+      }
+    );
   }, []);
 
   // Get Total Pizzas Solds
-  const [soldPizzas, setSoldPizzas] = useState(null); 
+  const [soldPizzas, setSoldPizzas] = useState(null);
 
   useEffect(() => {
-    fetchData("http://localhost/backend/getTotalPizzasSold.php").then((data) => {
-      setSoldPizzas(data);
-    });
+    fetchData("http://localhost/backend/getTotalPizzasSold.php").then(
+      (data) => {
+        setSoldPizzas(data);
+      }
+    );
   }, []);
-
 
   // Get Pizza Topping Data
   const [topping, setTopping] = useState(null);
@@ -152,6 +169,89 @@ export default function Dashboard() {
     { field: "num_of_orders", headerName: "Number of Orders", flex: 1 },
   ];
 
+  // This area is for handling xml output
+  // This is for XML Input
+  // Functions for XML
+
+  const [file, setFile] = useState(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const file = event.dataTransfer.files[0];
+    setFile(file);
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    setFile(file);
+  };
+
+  const [tableData, setTableData] = useState([]);
+
+  // ...
+
+  const handleUpload = (event) => {
+    event.preventDefault();
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const xmlData = event.target.result;
+        // Parse and process the XML data here
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+        const items = xmlDoc.getElementsByTagName("item");
+        const parsedData = [];
+        for (let i = 0; i < items.length; i++) {
+          const orderID =
+            items[i].getElementsByTagName("order_id")[0].textContent;
+          const runnerID =
+            items[i].getElementsByTagName("runner_id")[0].textContent;
+          const customerID =
+            items[i].getElementsByTagName("customer_id")[0].textContent;
+          const pizzaName =
+            items[i].getElementsByTagName("pizza_name")[0].textContent;
+
+          // Use the parsed data as needed
+          parsedData.push({ id: i, orderID, runnerID, customerID, pizzaName });
+        }
+
+        setTableData(parsedData);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  // ...
+
+  const handleTableData = () => {
+    return tableData.map((data, index) => (
+      <TableRow key={index}>
+        <TableCell>{data.orderID}</TableCell>
+        <TableCell>{data.runnerID}</TableCell>
+        <TableCell>{data.customerID}</TableCell>
+        <TableCell>{data.pizzaName}</TableCell>
+      </TableRow>
+    ));
+  };
+
+  // This area is for displaying data that came from XML
+  //////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////
+
   return (
     <>
       <div className="app">
@@ -181,7 +281,6 @@ export default function Dashboard() {
                   Download Reports For Data Mart
                 </Button>
               </Box>
-              
             </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6} md={3}>
@@ -239,9 +338,7 @@ export default function Dashboard() {
                     <LocalPizzaIcon fontSize="large" />
                   </div>
                   {soldPizzas && (
-                    <Typography variant="h3">
-                      {soldPizzas[0].total}
-                    </Typography>
+                    <Typography variant="h3">{soldPizzas[0].total}</Typography>
                   )}
                   <Typography variant="h6" sx={{ opacity: 0.72 }}>
                     Total Pizzas Solds
@@ -274,7 +371,7 @@ export default function Dashboard() {
                       {totalCustomers[0].total}
                     </Typography>
                   )}
-                  
+
                   <Typography variant="h6" sx={{ opacity: 0.8 }}>
                     Total Customers
                   </Typography>
@@ -302,9 +399,7 @@ export default function Dashboard() {
                     <DisabledByDefaultIcon fontSize="large" />
                   </div>
                   {totalCancel && (
-                    <Typography variant="h3">
-                      {totalCancel[0].total}
-                    </Typography>
+                    <Typography variant="h3">{totalCancel[0].total}</Typography>
                   )}
                   <Typography variant="h6" sx={{ opacity: 0.72 }}>
                     Cancelled Orders
@@ -368,6 +463,79 @@ export default function Dashboard() {
                 )}
               </Grid>
             </Grid>
+
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <Header title="" subtitle="Upload Data Report" />
+            </div>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              p={2}
+              border={
+                isDragOver
+                  ? "2px dashed #00AEEF"
+                  : "2px dashed rgba(0, 0, 0, 0.12)"
+              }
+              borderRadius={8}
+              bgcolor={isDragOver ? "rgba(0, 174, 239, 0.1)" : "transparent"}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <Typography variant="h4" align="center" gutterBottom>
+                Drag and Drop XML File Upload
+              </Typography>
+              <Typography variant="subtitle1" align="center" gutterBottom>
+                {isDragOver
+                  ? "Drop the XML file here"
+                  : "Drag and drop an XML file here"}
+              </Typography>
+              <Typography variant="body2" align="center" gutterBottom>
+                {file ? `Selected file: ${file.name}` : ""}
+              </Typography>
+              <input
+                type="file"
+                accept=".xml"
+                id="file-input"
+                style={{ display: "none" }}
+                onChange={handleFileInputChange}
+              />
+              <label htmlFor="file-input">
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="primary"
+                  disabled={isDragOver}
+                >
+                  Select File
+                </Button>
+              </label>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!file}
+                onClick={handleUpload}
+                sx={{ mt: 2 }}
+              >
+                Display in Table Format
+              </Button>
+            </Box>
+            <div style={{ height: 400, width: "100%" }}>
+              <DataGrid
+                columns={[
+                  { field: "orderID", headerName: "Order ID", width: 150 },
+                  { field: "runnerID", headerName: "Runner ID", width: 150 },
+                  {
+                    field: "customerID",
+                    headerName: "Customer ID",
+                    width: 150,
+                  },
+                  { field: "pizzaName", headerName: "Pizza Name", width: 150 },
+                ]}
+                rows={tableData}
+              />
+            </div>
           </Box>
         </main>
       </div>

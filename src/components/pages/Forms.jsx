@@ -15,7 +15,6 @@ import axios from "axios";
 
 import DataTable from "../interface/DataTable";
 
-
 // Headers for Runners Data
 const runnerHeaders = [
   { field: "runner_id", headerName: "ID", width: 70 },
@@ -27,7 +26,6 @@ const runnerHeaders = [
 ];
 
 export default function Forms() {
-
   // Get Runner Data
   const [runners, setRunners] = useState(null);
 
@@ -45,7 +43,6 @@ export default function Forms() {
         console.error("Error retrieving customer data:", error);
       });
   }, []);
-
 
   ////////////////////////////////
 
@@ -134,7 +131,6 @@ export default function Forms() {
     }
   };
 
-
   // Function for uploading XML Pizza Names
   const handleXML = (event) => {
     event.preventDefault();
@@ -174,7 +170,7 @@ export default function Forms() {
             </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6}>
-              <div style={{ textAlign: "left", marginTop: "20px"}}>
+                <div style={{ textAlign: "left", marginTop: "20px" }}>
                   <Header title="" subtitle="Registration Form" />
                 </div>
                 <Box
@@ -187,7 +183,6 @@ export default function Forms() {
                     padding: "20px",
                     borderRadius: "15px",
                     height: "85%",
-                   
                   }}
                 >
                   <Typography component="h1" variant="h5">
@@ -321,9 +316,8 @@ export default function Forms() {
                     Upload
                   </Button>
                 </Box>
-                
 
-                <div style={{ textAlign: "center", marginTop: "20px"}}>
+                <div style={{ textAlign: "center", marginTop: "20px" }}>
                   <Header title="" subtitle="Upload Pizza Names" />
                 </div>
                 <Box
@@ -382,11 +376,9 @@ export default function Forms() {
                     Upload
                   </Button>
                 </Box>
-
-                
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-              {runners && (
+                {runners && (
                   <DataTable n_rows={runners} n_columns={runnerHeaders} />
                 )}
               </Grid>
