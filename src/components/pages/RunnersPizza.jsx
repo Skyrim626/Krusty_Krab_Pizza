@@ -12,8 +12,10 @@ import Header from "../interface/Header";
 import { tokens } from "../../theme";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import SearchBar from "../interface/SearchBar";
 import DataTable from "../interface/DataTable";
+import { fetchData } from "../js/api";
+import { DataGrid } from "@mui/x-data-grid";
 
 // Headers for Runners Data
 const runnerHeaders = [
@@ -25,24 +27,54 @@ const runnerHeaders = [
   { field: "registration_date", headerName: "Registration Date", width: 130 },
 ];
 
+// Headers for Runners Data
+const procedure4Headers = [
+  { field: "order_id", headerName: "ID", width: 70 },
+  { field: "runner_id", headerName: "Runner ID", width: 130 },
+  { field: "pickup_time", headerName: "Pickup Time", width: 130 },
+  { field: "distance", headerName: "Distance", width: 130 },
+  { field: "duration", headerName: "Duration", width: 130 },
+  { field: "cancellation", headerName: "Cancellation", width: 130 },
+];
+
 export default function Forms() {
   // Get Runner Data
   const [runners, setRunners] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost/backend/getAllRunner.php")
-      .then((res) => res.json())
-      .then((data) => {
-        const modifiedData = data.map((runners) => ({
-          ...runners,
-          id: runners.runner_id,
-        }));
-        setRunners(modifiedData);
-      })
-      .catch((error) => {
-        console.error("Error retrieving customer data:", error);
-      });
+    fetchData("getAllRunners").then((data) => {
+      const modifiedData = data.map((runners) => ({
+        ...runners,
+        id: runners.runner_id,
+      }));
+      setRunners(modifiedData);
+    });
   }, []);
+
+  // Procedure 4 : Get Runner Orders
+  const [procedure4, setProcedure4] = useState([]);
+
+  // Function for searching method
+  const handleSearch = (searchValue) => {
+    fetch("http://localhost/backend/searchingRunnerOrders.php", {
+      method: "POST",
+      body: JSON.stringify({ searchValue }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const modifiedData = data.map((procedure4) => ({
+          ...procedure4,
+          id: procedure4.order_id,
+        }));
+        setProcedure4(modifiedData);
+      })
+      .catch((error) =>
+        console.error("Error retrieving search results:", error)
+      );
+  };
 
   ////////////////////////////////
 
@@ -383,6 +415,62 @@ export default function Forms() {
                 )}
               </Grid>
             </Grid>
+
+            <Box m="20px">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                flexWrap="wrap"
+                alignItems="center"
+              >
+                <Header
+                  title="Procedure 4"
+                  subtitle="Procedure 4 : Get Runner Orders"
+                />
+              </Box>
+              <Box
+                m="3px 0 0 0"
+                height="70vh"
+                sx={{
+                  "& .MuiDataGrid-root": {
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    borderBottom: "none",
+                  },
+                  "& .name-column--cell": {
+                    color: colors.greenAccent[300],
+                  },
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: colors.blueAccent[700],
+                    borderBottom: "none",
+                  },
+                  "& .MuiDataGrid-virtualScroller": {
+                    backgroundColor: colors.primary[400],
+                  },
+                  "& .MuiDataGrid-footerContainer": {
+                    borderTop: "none",
+                    backgroundColor: colors.blueAccent[700],
+                  },
+                  "& .MuiCheckbox-root": {
+                    color: `${colors.greenAccent[200]} !important`,
+                  },
+                  "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                    color: `${colors.grey[100]} !important`,
+                  },
+                }}
+              >
+                <SearchBar handleSearch={handleSearch} />
+                <div style={{ height: 430, width: "100%", overflowX: "auto" }}>
+                  <DataGrid
+                    style={{ marginTop: "15px" }}
+                    columns={procedure4Headers}
+                    rows={procedure4}
+                    autoHeight
+                  />
+                </div>
+              </Box>
+            </Box>
           </Box>
         </main>
       </div>

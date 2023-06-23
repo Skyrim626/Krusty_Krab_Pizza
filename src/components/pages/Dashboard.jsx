@@ -19,6 +19,16 @@ import {
 } from "@mui/material";
 import Header from "../interface/Header";
 import { tokens } from "../../theme";
+/* import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts"; */
+import { fetchData } from "../js/api";
 
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import LocalPizzaIcon from "@mui/icons-material/LocalPizza";
@@ -30,24 +40,13 @@ import { useState, useEffect } from "react";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import DataTable from "../interface/DataTable";
 import { saveAs } from "file-saver";
+import SearchBar from "../interface/SearchBar";
 
 // Headers for Pizza Toppings
 const pizza_toppings = [
   { field: "topping_id", headerName: "ID", width: 70 },
   { field: "topping_name", headerName: "Topping Name", width: 130 },
 ];
-
-// A function that fetches Data's
-function fetchData(api) {
-  return fetch(api)
-    .then((res) => res.json())
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error retrieving total runners data:", error);
-    });
-}
 
 export default function Dashboard() {
   // A function that format the data(Mysql) into XML
@@ -83,91 +82,142 @@ export default function Dashboard() {
 
   // Get Total Runners Data
   const [totalRunners, setTotalRunners] = useState(null);
-
-  useEffect(() => {
-    fetchData("http://localhost/backend/getTotalRunners.php").then((data) => {
-      setTotalRunners(data);
-    });
-  }, []);
-
   // Get Total Customers Data
   const [totalCustomers, setTotalCustomers] = useState(null);
-
-  useEffect(() => {
-    fetchData("http://localhost/backend/getTotalCustomers.php").then((data) => {
-      setTotalCustomers(data);
-    });
-  }, []);
-
   // Get Total Cancelled Orders
   const [totalCancel, setTotalCancel] = useState(null);
-
-  useEffect(() => {
-    fetchData("http://localhost/backend/getTotalCancelledOrders.php").then(
-      (data) => {
-        setTotalCancel(data);
-      }
-    );
-  }, []);
-
   // Get Total Pizzas Solds
   const [soldPizzas, setSoldPizzas] = useState(null);
-
-  useEffect(() => {
-    fetchData("http://localhost/backend/getTotalPizzasSold.php").then(
-      (data) => {
-        setSoldPizzas(data);
-      }
-    );
-  }, []);
-
   // Get Pizza Topping Data
   const [topping, setTopping] = useState(null);
 
+  // Get Unique Customers Orders
+  const [procedure3, setProcedure3] = useState(null);
+
+  // Get Top 10 Pizzas
+  const [procedure6, setProcedure6] = useState(null);
+
   useEffect(() => {
-    fetch("http://localhost/backend/pizzaToppings.php")
-      .then((res) => res.json())
-      .then((data) => {
-        const modifiedData = data.map((topping) => ({
-          ...topping,
-          id: topping.topping_id,
-        }));
-        setTopping(modifiedData);
-      })
-      .catch((error) => {
-        console.error("Error retrieving customer data:", error);
-      });
+    fetchData("getTotalRunners").then((data) => {
+      const modifiedData = data.map((totalRunners) => ({
+        ...totalRunners,
+        id: totalRunners.total,
+      }));
+      setTotalRunners(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("procedure3").then((data) => {
+      const modifiedData = data.map((procedure3) => ({
+        ...procedure3,
+        id: procedure3.customer_id,
+      }));
+      setProcedure3(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("getTop10Pizza").then((data) => {
+      const modifiedData = data.map((procedure6) => ({
+        ...procedure6,
+        id: procedure6.pizza_id,
+      }));
+      setProcedure6(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("getTotalCustomers").then((data) => {
+      const modifiedData = data.map((totalCustomers) => ({
+        ...totalCustomers,
+        id: totalCustomers.total,
+      }));
+      setTotalCustomers(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("getAllCancelledOrders").then((data) => {
+      const modifiedData = data.map((totalCancel) => ({
+        ...totalCancel,
+        id: totalCancel.total,
+      }));
+      setTotalCancel(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("getPizzasSold").then((data) => {
+      const modifiedData = data.map((soldPizzas) => ({
+        ...soldPizzas,
+        id: soldPizzas.total,
+      }));
+      setSoldPizzas(modifiedData);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData("getAllToppings").then((data) => {
+      const modifiedData = data.map((topping) => ({
+        ...topping,
+        id: topping.topping_id,
+      }));
+      setTopping(modifiedData);
+    });
   }, []);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Use State Area
-  // Card 2 -
-
-  const [codeCard2, setCodeCar2] = useState(null);
-
-  useEffect(() => {
-    fetch("http://localhost/backend/totalCustomersOrdersPerDay.php")
-      .then((res) => res.json())
-      .then((data) => {
-        const modifiedData = data.map((codeCard2) => ({
-          ...codeCard2,
-          id: codeCard2.order_date,
-        }));
-        setCodeCar2(modifiedData);
-      })
-      .catch((error) => {
-        console.error("Error retrieving customer data:", error);
-      });
-  }, []);
-
   ///////////////////////////////
-  // Card 2 Columns:
-  const card2 = [
-    { field: "order_date", headerName: "Order Date", flex: 1 },
-    { field: "num_of_orders", headerName: "Number of Orders", flex: 1 },
+  // Procedure 1 Columns:
+  const procedure1Header = [
+    { field: "pizza_name", headerName: "Pizza Name", flex: 1 },
+    {
+      field: "num_of_pizzas_ordered",
+      headerName: "Number of Pizzas Ordered",
+      flex: 1,
+    },
   ];
+
+  const procedure3Header = [
+    { field: "customer_id", headerName: "ID", flex: 1 },
+    { field: "num_of_orders", headerName: "No. of Orders", flex: 1 },
+    { field: "exclusions", headerName: "Exclusions", flex: 1 },
+    { field: "extras", headerName: "Extras", flex: 1 },
+    { field: "order_date", headerName: "Order Date", flex: 1 },
+  ];
+
+  const procedure6Header = [
+    { field: "pizza_id", headerName: "ID", flex: 1 },
+    { field: "pizza_name", headerName: "Pizza Name", flex: 1 },
+    { field: "Total_Orders", headerName: "Total_Orders", flex: 1 },
+  ];
+
+  // Function for searching method
+  const [procedure1, setProcedure1] = useState([]);
+  const handleSearch = (searchValue) => {
+    fetch("http://localhost/backend/searchingMostOrderedPizza.php", {
+      method: "POST",
+      body: JSON.stringify({ searchValue }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Add a unique id property to each row
+        const rowsWithId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setProcedure1(rowsWithId);
+      })
+      .catch((error) =>
+        console.error("Error retrieving search results:", error)
+      );
+  };
 
   // This area is for handling xml output
   // This is for XML Input
@@ -410,7 +460,65 @@ export default function Dashboard() {
               <Grid item xs={12} sm={12} md={8}>
                 <Header
                   title="Pizza's Orders"
-                  subtitle="Pizza Names and their solds"
+                  subtitle="Procedure 1: Most Ordered Pizza and their solds"
+                />
+                <Box
+                  m="3px 0 0 0"
+                  height=""
+                  sx={{
+                    "& .MuiDataGrid-root": {
+                      border: "none",
+                    },
+                    "& .MuiDataGrid-cell": {
+                      borderBottom: "none",
+                    },
+                    "& .name-column--cell": {
+                      color: colors.greenAccent[300],
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                      backgroundColor: colors.blueAccent[700],
+                      borderBottom: "none",
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
+                      backgroundColor: colors.primary[400],
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                      borderTop: "none",
+                      backgroundColor: colors.blueAccent[700],
+                    },
+                    "& .MuiCheckbox-root": {
+                      color: `${colors.greenAccent[200]} !important`,
+                    },
+                    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                      color: `${colors.grey[100]} !important`,
+                    },
+                  }}
+                >
+                  <SearchBar handleSearch={handleSearch} />
+                  <DataGrid
+                    style={{ marginTop: "15px" }}
+                    columns={procedure1Header}
+                    rows={procedure1}
+                    autoHeight
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4}>
+                <div style={{ textAlign: "right" }}>
+                  <Header
+                    title="Pizzas Toppings"
+                    subtitle="List of Pizza Toppings"
+                  />
+                </div>
+                {topping && (
+                  <DataTable n_rows={topping} n_columns={pizza_toppings} />
+                )}
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={8}>
+                <Header
+                  title="Procedure 3"
+                  subtitle="Procedure 3: Unique Customers Orders"
                 />
                 <Box
                   m="3px 0 0 0"
@@ -444,22 +552,24 @@ export default function Dashboard() {
                     },
                   }}
                 >
-                  <div
-                    style={{ height: 430, width: "100%", overflowX: "auto" }}
-                  >
-                    {codeCard2 && <DataGrid rows={codeCard2} columns={card2} />}
-                  </div>
+                  {procedure3 && (
+                    <DataGrid
+                      style={{ marginTop: "15px", height: "400px" }}
+                      columns={procedure3Header}
+                      rows={procedure3}
+                    />
+                  )}
                 </Box>
               </Grid>
               <Grid item xs={12} sm={12} md={4}>
                 <div style={{ textAlign: "right" }}>
                   <Header
-                    title="Pizzas Toppings"
-                    subtitle="List of Pizza Toppings"
+                    title="Top 10 Pizza Names"
+                    subtitle="Procedure 6 : Get Top 10 Pizza"
                   />
                 </div>
-                {topping && (
-                  <DataTable n_rows={topping} n_columns={pizza_toppings} />
+                {procedure6 && (
+                  <DataTable n_rows={procedure6} n_columns={procedure6Header} />
                 )}
               </Grid>
             </Grid>

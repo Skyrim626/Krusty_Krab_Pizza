@@ -7,9 +7,6 @@ import Header from "../interface/Header";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import React, { useEffect, useState } from "react";
 
-// Card 1: Number_of_Customer_orders
-// Card 2: Total Customers Orders Per Day
-
 export default function Table() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -17,29 +14,36 @@ export default function Table() {
   // Use State Area
   // Card 1 -
 
-  const [codeCard1, setCodeCar1] = useState(null);
+  const [codeCard1, setCodeCard1] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost/backend/numberCustomersOrders.php")
+  // Use State Area
+  // Card 2 -
+
+  const [codeCard2, setCodeCar2] = useState(null);
+
+  // A function to fetch the data
+  const fetchData = (url, setData, key_id) => {
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         const modifiedData = data.map((codeCard1) => ({
           ...codeCard1,
           id: codeCard1.customer_id,
         }));
-        setCodeCar1(modifiedData);
+        setData(modifiedData);
       })
       .catch((error) => {
-        console.error("Error retrieving customer data:", error);
+        console.error("Error retrieving data:", error);
       });
+  };
+
+  // Fetching Data
+  useEffect(() => {
+    fetchData(
+      "http://localhost/backend/numberCustomersOrders.php",
+      setCodeCard1
+    );
   }, []);
-
-  ///////////////////////////////////////
-
-  // Use State Area
-  // Card 2 -
-
-  const [codeCard2, setCodeCar2] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost/backend/totalCustomersOrdersPerDay.php")

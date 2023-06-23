@@ -6,10 +6,9 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import TableViewIcon from "@mui/icons-material/TableView";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import { useNavigate } from "react-router-dom";
 
 const Item = ({ title, to, icon }) => {
@@ -98,8 +97,13 @@ export default function Nav() {
               />
               <Item
                 title="Customers"
-                to="/people"
+                to="/customers"
                 icon={<PeopleOutlinedIcon />}
+              />
+              <Item
+                title="Runners & Pizzas Form"
+                to="/pizza_runners"
+                icon={<DeliveryDiningIcon />}
               />
               <Item title="Forms" to="/form" icon={<ContactsOutlinedIcon />} />
               {/* <Typography
@@ -110,13 +114,6 @@ export default function Nav() {
                 Data Table
               </Typography> */}
               <Item title="Table" to="/table" icon={<TableViewIcon />} />
-              <Item title="Chart" to="/chart" icon={<BarChartOutlinedIcon />} />
-              <Item
-                title="Help"
-                to="/help"
-                icon={<HelpOutlineOutlinedIcon />}
-              />
-              <Item title="Map" to="/map" icon={<MapOutlinedIcon />} />
             </Box>
           </Menu>
         </Sidebar>

@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const Login = React.lazy(() => import("../components/pages/Login"));
 const Dashboard = React.lazy(() => import("../components/pages/Dashboard"));
+const Customers = React.lazy(() => import("../components/pages/Customers"));
 const People = React.lazy(() => import("../components/pages/People"));
-const Chart = React.lazy(() => import("../components/pages/Chart"));
-const Forms = React.lazy(() => import("../components/pages/Forms"));
-const Help = React.lazy(() => import("../components/pages/Help"));
-const Map = React.lazy(() => import("../components/pages/Map"));
+const RunnersPizza = React.lazy(() =>
+  import("../components/pages/RunnersPizza")
+);
 const Table = React.lazy(() => import("../components/pages/Table"));
 
 export default function AppRoute() {
@@ -17,11 +17,9 @@ export default function AppRoute() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/customers" element={<Customers />} />
           <Route path="/people" element={<People />} />
-          <Route path="/chart" element={<Chart />} />
-          <Route path="/form" element={<Forms />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/map" element={<Map />} />
+          <Route path="/pizza_runners" element={<RunnersPizza />} />
           <Route path="/table" element={<Table />} />
         </Routes>
       </BrowserRouter>
