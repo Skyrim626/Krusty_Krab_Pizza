@@ -105,7 +105,7 @@ export default function Nav() {
                 to="/pizza_runners"
                 icon={<DeliveryDiningIcon />}
               />
-              <Item title="Forms" to="/form" icon={<ContactsOutlinedIcon />} />
+
               {/* <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -113,7 +113,6 @@ export default function Nav() {
               >
                 Data Table
               </Typography> */}
-              <Item title="Table" to="/table" icon={<TableViewIcon />} />
             </Box>
           </Menu>
         </Sidebar>
