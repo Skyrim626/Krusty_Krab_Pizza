@@ -495,12 +495,16 @@ export default function Dashboard() {
                   }}
                 >
                   <SearchBar handleSearch={handleSearch} />
-                  <DataGrid
-                    style={{ marginTop: "15px" }}
-                    columns={procedure1Header}
-                    rows={procedure1}
-                    autoHeight
-                  />
+                  <div
+                    style={{
+                      height: 430,
+                      width: "100%",
+                      overflowX: "auto",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <DataGrid columns={procedure1Header} rows={procedure1} />
+                  </div>
                 </Box>
               </Grid>
               <Grid item xs={12} sm={12} md={4}>
