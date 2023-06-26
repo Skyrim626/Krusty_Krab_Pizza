@@ -9,11 +9,13 @@ import backgroundImage from "../../images/wave.png";
 
 import logo from "../../images/background.svg";
 import avatar from "../../images/pizzaAvatar.svg";
+import CustomerDashboard from "./CustomerDashboard";
 
 export default function CustomerLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [data, setData] = useState(null); // State to store the API response data
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,12 +31,14 @@ export default function CustomerLogin() {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        if (data.status) {
-          // Redirect to customer dashboard if login is successful
-          navigate("/customer-dashboard", {
-            state: { customerData: data.customerData },
-          });
+        const responseData = await response.json();
+        if (responseData.status) {
+          // Set the data and navigate to the customer dashboard if login is successful
+
+          setData(responseData); // Set the API response data
+          console.log("The data is : ", responseData);
+
+          navigate("/customer-dashboard", { state: responseData });
         } else {
           alert("Invalid email or password.");
         }

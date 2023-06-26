@@ -10,16 +10,17 @@ import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import CameraIcon from "@mui/icons-material/PhotoCamera";
+import CustomizedDialogs from "../interface/CustomizedDialogs";
+import LocalPizzaIcon from "@mui/icons-material/LocalPizza";
+import { useLocation } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function CustomerDashboard() {
   const [pizzaNames, setPizzaNames] = useState([]);
+  const { state: data } = useLocation();
 
   const fetchPizzaNames = async () => {
     try {
@@ -42,9 +43,10 @@ export default function CustomerDashboard() {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <CameraIcon sx={{ mr: 2 }} />
+          <LocalPizzaIcon sx={{ mr: 2 }} />
           <Typography variant="h6" color="inherit" noWrap>
-            Pizza Runner
+            Welcome to Pizza Runner, {data.customerData.first_name}{" "}
+            {data.customerData.last_name}!
           </Typography>
         </Toolbar>
       </AppBar>
@@ -71,21 +73,12 @@ export default function CustomerDashboard() {
               scrolling through his Instagram feed when something really caught
               his eye - “80s Retro Styling and Pizza Is The Future!”
             </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
-            </Stack>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
             {pizzaNames.map((pizza, index) => {
-              console.log(pizza.pizza_image); // Log the value of pizza.pizza_image
+              // Log the value of pizza.pizza_image
 
               return (
                 <Grid item key={index} xs={12} sm={6} md={4}>
@@ -122,8 +115,11 @@ export default function CustomerDashboard() {
                       <Typography>₱{pizza.price}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small">Place Order</Button>
-                      <Button size="small"></Button>
+                      <CustomizedDialogs
+                        pizza={pizza}
+                        customer={data.customerData}
+                      />{" "}
+                      {/* Pass pizza details as props */}
                     </CardActions>
                   </Card>
                 </Grid>
