@@ -17,6 +17,7 @@
     "@fullcalendar/react": "^6.1.8",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.5",
+    "@mui/styles": "^5.13.2",
     "@mui/x-data-grid": "^6.7.0",
     "@mui/x-data-grid-generator": "^6.7.0",
     "@nivo/bar": "^0.83.0",
@@ -27,7 +28,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^1.1.0-alpha.1",
-    "react-router-dom": "^6.12.1"
+    "react-router-dom": "^6.12.1",
+    "recharts": "^2.7.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

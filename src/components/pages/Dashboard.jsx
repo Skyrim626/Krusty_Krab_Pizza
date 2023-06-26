@@ -41,6 +41,7 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import DataTable from "../interface/DataTable";
 import { saveAs } from "file-saver";
 import SearchBar from "../interface/SearchBar";
+import DataChart from "../interface/DataChart";
 
 // Headers for Pizza Toppings
 const pizza_toppings = [
@@ -519,6 +520,24 @@ export default function Dashboard() {
                 )}
               </Grid>
 
+              <DataChart margin={"30px"} />
+              {/* <div>
+                <h1>Bar Chart</h1>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={chartData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="value" fill="#8884d8" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div> */}
+
               <Grid item xs={12} sm={12} md={8}>
                 <Header
                   title="Procedure 3"
@@ -565,6 +584,7 @@ export default function Dashboard() {
                   )}
                 </Box>
               </Grid>
+
               <Grid item xs={12} sm={12} md={4}>
                 <div style={{ textAlign: "right" }}>
                   <Header

@@ -184,6 +184,37 @@ export default function Forms() {
     }
   };
 
+  // A function that format the data(Mysql) into XML
+  const [data, setData] = useState("");
+
+  const formatDataToXml = (data) => {
+    let xmlData = "<root>";
+    // Format the data to XML here using the retrieved data
+    data.forEach((item) => {
+      xmlData += "<item>";
+      xmlData += `<order_id>${item.order_id}</order_id>`;
+      xmlData += `<runner_id>${item.runner_id}</runner_id>`;
+      xmlData += `<customer_id>${item.customer_id}</customer_id>`;
+      xmlData += `<pizza_name>${item.pizza_name}</pizza_name>`;
+      xmlData += "</item>";
+    });
+    xmlData += "</root>";
+    return xmlData;
+  };
+
+  const handleDownload = () => {
+    fetch("http://localhost/backend/fetchForDataMart.php")
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = formatDataToXml(data);
+        const blob = new Blob([formattedData], { type: "application/xml" });
+        saveAs(blob, "Data  Mart.xml");
+      })
+      .catch((error) => {
+        console.error("Error retrieving data:", error);
+      });
+  };
+
   return (
     <>
       <div className="app">
