@@ -15,6 +15,7 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CameraIcon from "@mui/icons-material/PhotoCamera";
+import imagePaths from "../../json/imagePaths.json";
 
 const defaultTheme = createTheme();
 
@@ -58,7 +59,7 @@ export default function CustomerDashboard() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              Pizza Menu
             </Typography>
             <Typography
               variant="h5"
@@ -66,9 +67,10 @@ export default function CustomerDashboard() {
               color="text.secondary"
               paragraph
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              Did you know that over 115 million kilograms of pizza is consumed
+              daily worldwide??? (Well according to Wikipedia anyway…) Danny was
+              scrolling through his Instagram feed when something really caught
+              his eye - “80s Retro Styling and Pizza Is The Future!”
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -83,36 +85,51 @@ export default function CustomerDashboard() {
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
-            {pizzaNames.map((pizza, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <CardMedia
-                    component="div"
+            {pizzaNames.map((pizza, index) => {
+              console.log(pizza.pizza_image); // Log the value of pizza.pizza_image
+
+              return (
+                <Grid item key={index} xs={12} sm={6} md={4}>
+                  <Card
                     sx={{
-                      // 16:9
-                      pt: "56.25%",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
                     }}
-                    image={pizza.pizza_image}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {pizza.pizza_name}
-                    </Typography>
-                    <Typography>₱{pizza.price}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Place Order</Button>
-                    <Button size="small"></Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+                  >
+                    <CardMedia
+                      component="div"
+                      sx={{
+                        // 16:9
+
+                        width: 350,
+                        height: 250,
+                      }}
+                    >
+                      <img
+                        src={`../../src/images/menu/${pizza.pizza_image}`}
+                        alt={pizza.pizza_name}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </CardMedia>
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {pizza.pizza_name}
+                      </Typography>
+                      <Typography>₱{pizza.price}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">Place Order</Button>
+                      <Button size="small"></Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </Container>
       </main>
