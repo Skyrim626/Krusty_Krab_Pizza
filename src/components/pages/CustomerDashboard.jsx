@@ -15,7 +15,6 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CameraIcon from "@mui/icons-material/PhotoCamera";
-import imagePaths from "../../json/imagePaths.json";
 
 const defaultTheme = createTheme();
 
