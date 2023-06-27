@@ -22,7 +22,7 @@ const CustomBarChart = ({ margin }) => {
   }, []);
 
   return (
-    <div style={{ width: "100%", height: 400, margin }}>
+    <div style={{ width: "100%", height: 400, margin, marginTop: "40px" }}>
       <Typography variant="h5" align="center" gutterBottom>
         Pizza Order Count
       </Typography>

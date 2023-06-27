@@ -520,7 +520,7 @@ export default function Dashboard() {
                 )}
               </Grid>
 
-              <DataChart margin={"30px"} />
+              <DataChart margin={"10px"} />
               {/* <div>
                 <h1>Bar Chart</h1>
                 <ResponsiveContainer width="100%" height={300}>
