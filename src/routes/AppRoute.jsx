@@ -13,6 +13,9 @@ const RunnersPizza = React.lazy(() =>
 const CustomerLogin = React.lazy(() =>
   import("../components/pages/CustomerLogin")
 );
+const OrderManagemnt = React.lazy(() =>
+  import("../components/pages/OrderManagement")
+);
 
 export default function AppRoute() {
   return (
@@ -25,6 +28,7 @@ export default function AppRoute() {
           <Route path="/customer-login" element={<CustomerLogin />} />
           <Route path="/customer-dashboard" element={<CustomerDashboard />} />
           <Route path="/pizza_runners" element={<RunnersPizza />} />
+          <Route path="/orders" element={<OrderManagemnt />} />
         </Routes>
       </BrowserRouter>
     </>

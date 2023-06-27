@@ -10,6 +10,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import TableViewIcon from "@mui/icons-material/TableView";
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import { useNavigate } from "react-router-dom";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Item = ({ title, to, icon }) => {
   const theme = useTheme();
@@ -105,6 +107,9 @@ export default function Nav() {
                 to="/pizza_runners"
                 icon={<DeliveryDiningIcon />}
               />
+
+              <Item title="Orders" to="/orders" icon={<LocalShippingIcon />} />
+              <Item title="Log Out" to="/" icon={<LogoutIcon />} />
 
               {/* <Typography
                 variant="h6"
